@@ -3,28 +3,26 @@ package com.example.willweiss.intervaltracker
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.SeekBar
+import com.example.willweiss.intervaltracker.components.TimePickerChangeListener
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), SeekBar.OnSeekBarChangeListener {
+class MainActivity : AppCompatActivity() {
 
-    override fun onProgressChanged(seekBar: SeekBar, progress: Int,
-                                   fromUser: Boolean) {
-        pickedTime.text = progress.toString() + "s"
-    }
-
-    override fun onStartTrackingTouch(seekBar: SeekBar) {}
-
-    override fun onStopTrackingTouch(seekBar: SeekBar) {}
+    private var timePickerListener: TimePickerChangeListener? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        timePicker.setOnSeekBarChangeListener(this)
+        timePickerListener = TimePickerChangeListener(pickedTime)
+        timePicker.setOnSeekBarChangeListener(timePickerListener)
         pickedTime.text = timePicker.progress.toString() + "s"
     }
 
     fun incrementProgressBar(view: View) {
-        timerBar.incrementProgressBy(10)
+        val progress = timerBar.progress
+        val nextProgress =
+                if (progress + 10 > timerBar.max) timerBar.max
+                else progress + 10
+        timerBar.setProgress(nextProgress, true)
     }
 }
