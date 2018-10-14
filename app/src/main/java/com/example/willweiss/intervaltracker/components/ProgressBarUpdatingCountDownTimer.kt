@@ -14,6 +14,6 @@ class ProgressBarUpdatingCountDownTimer(val progressBar: ProgressBar, val millis
 
     override fun onFinish() {
         println("ProgressBarMax: " + progressBar.max + ", Progress: " + progressBar.progress)
-        progressBar.setProgress(progressBar.max)
+        progressBar.setProgress(0)
     }
 }
