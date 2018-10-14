@@ -22,6 +22,8 @@ class MainActivity : AppCompatActivity() {
 
     fun startTimer(view: View) {
         timerBar.setProgress(0)
-        ProgressBarUpdatingCountDownTimer(timerBar, 10000, 100).start()
+        val countdownTime = timePicker.progress * 1000
+        timerBar.max = countdownTime
+        ProgressBarUpdatingCountDownTimer(timerBar, countdownTime.toLong(), 100).start()
     }
 }
