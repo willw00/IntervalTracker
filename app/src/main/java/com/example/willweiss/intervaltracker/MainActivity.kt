@@ -2,20 +2,45 @@ package com.example.willweiss.intervaltracker
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.os.Message
 import android.view.View
 import com.example.willweiss.intervaltracker.components.ProgressBarUpdatingCountDownTimer
 import com.example.willweiss.intervaltracker.components.TimePickerChangeListener
 import com.example.willweiss.intervaltracker.model.Interval
 import com.example.willweiss.intervaltracker.model.IntervalSet
+import com.example.willweiss.intervaltracker.model.ProgressBarUpdate
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
 
     private var timePickerListener: TimePickerChangeListener? = null
 
+    private val UPDATE_PROGRESS_BAR: Int = 1
+
     private val intervalSet = IntervalSet(listOf(
-            Interval("First!", 2),
-            Interval("Second!", 5)))
+            Interval("First!", 10),
+            Interval("Second!", 10)))
+
+    val progressBarHandler = Handler() {message ->
+        true
+        if (message.what == UPDATE_PROGRESS_BAR) {
+            val progress = message.obj as ProgressBarUpdate
+
+            timerBar.setProgress(0)
+
+            println(progress.interval)
+            currentIntervalName.text = progress.interval.name
+
+            val countdownMillis = progress.interval.seconds * 1000
+            timerBar.max = countdownMillis
+
+            ProgressBarUpdatingCountDownTimer(timerBar, countdownMillis.toLong(), 100).start()
+            true
+        }
+        else false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,23 +53,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startTimer(view: View) {
-//        val countdownTime = timePicker.progress * 1000
-//        timerBar.max = countdownTime
-        val intervalsIterator = intervalSet.intervals.iterator()
 
-        intervalsIterator.withIndex().forEach { s ->
-            timerBar.setProgress(0)
+        val background = Thread(Runnable {
+            try {
+                val intervalsIterator = intervalSet.intervals.iterator()
+                intervalsIterator.withIndex().forEach { s ->
+                    val countdownMillis = s.value.seconds * 1000
+                    val message = progressBarHandler.obtainMessage(UPDATE_PROGRESS_BAR, ProgressBarUpdate(s.index, s.value))
+                    progressBarHandler.sendMessage(message)
+                    Thread.sleep(countdownMillis.toLong())
+                }
+            }
+            catch (e: Exception) {
+                println(e.message)
+            }
+        })
 
-            print(s.value)
-            currentIntervalName.text = s.value.name
-            var nextName = if (intervalsIterator.hasNext()) intervalSet.intervals.get(s.index + 1).name else "Last Interval"
-
-            nextIntervalName.text = nextName
-
-            val countdownMillis = s.value.seconds * 1000
-            timerBar.max = countdownMillis
-
-            ProgressBarUpdatingCountDownTimer(timerBar, countdownMillis.toLong(), 100).start()
-        }
+        background.start()
     }
 }
