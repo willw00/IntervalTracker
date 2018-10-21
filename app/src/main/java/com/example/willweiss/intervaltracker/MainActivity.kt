@@ -20,26 +20,27 @@ class MainActivity : AppCompatActivity() {
     private val UPDATE_PROGRESS_BAR: Int = 1
 
     private val intervalSet = IntervalSet(listOf(
-            Interval("First!", 2),
-            Interval("Second!", 5)))
+            Interval("First!", 10),
+            Interval("Second!", 10)))
 
-//    val progressBarHandler = Handler() {message ->
-//        if (message.what == UPDATE_PROGRESS_BAR) {
-//            val progress = message as ProgressBarUpdate
-//
-//            timerBar.setProgress(0)
-//
-//            print(progress.interval)
-//            currentIntervalName.text = progress.interval.name
-//
-//            val countdownMillis = progress.interval.seconds * 1000
-//            timerBar.max = countdownMillis
-//
-//            ProgressBarUpdatingCountDownTimer(timerBar, countdownMillis.toLong(), 100).start()
-//            true
-//        }
-//        else false
-//    }
+    val progressBarHandler = Handler() {message ->
+        true
+        if (message.what == UPDATE_PROGRESS_BAR) {
+            val progress = message.obj as ProgressBarUpdate
+
+            timerBar.setProgress(0)
+
+            println(progress.interval)
+            currentIntervalName.text = progress.interval.name
+
+            val countdownMillis = progress.interval.seconds * 1000
+            timerBar.max = countdownMillis
+
+            ProgressBarUpdatingCountDownTimer(timerBar, countdownMillis.toLong(), 100).start()
+            true
+        }
+        else false
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,25 +53,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun startTimer(view: View) {
-        print("Button pressed!")
-        timerBar.setProgress(0)
-//        val background = Thread(Runnable {
-//            val intervalsIterator = intervalSet.intervals.iterator()
-//
-//            fun run() {
-//                try {
-//                    intervalsIterator.withIndex().forEach { s ->
-//                        val countdownMillis = s.value.seconds * 1000
-//                        val message = progressBarHandler.obtainMessage(UPDATE_PROGRESS_BAR, ProgressBarUpdate(s.index, s.value))
-//                        print("Sending message: " + message)
-//                        progressBarHandler.sendMessage(message)
-//                        Thread.sleep(countdownMillis.toLong())
-//                    }
-//                }
-//                catch (e: Exception) { }
-//            }
-//        })
-//
-//        background.start()
+
+        val background = Thread(Runnable {
+            try {
+                val intervalsIterator = intervalSet.intervals.iterator()
+                intervalsIterator.withIndex().forEach { s ->
+                    val countdownMillis = s.value.seconds * 1000
+                    val message = progressBarHandler.obtainMessage(UPDATE_PROGRESS_BAR, ProgressBarUpdate(s.index, s.value))
+                    progressBarHandler.sendMessage(message)
+                    Thread.sleep(countdownMillis.toLong())
+                }
+            }
+            catch (e: Exception) {
+                println(e.message)
+            }
+        })
+
+        background.start()
     }
 }
