@@ -3,8 +3,6 @@ package com.example.willweiss.intervaltracker
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
-import android.os.Message
 import android.view.View
 import com.example.willweiss.intervaltracker.components.ProgressBarUpdatingCountDownTimer
 import com.example.willweiss.intervaltracker.components.TimePickerChangeListener
@@ -24,7 +22,6 @@ class MainActivity : AppCompatActivity() {
             Interval("Second!", 10)))
 
     val progressBarHandler = Handler() {message ->
-        true
         if (message.what == UPDATE_PROGRESS_BAR) {
             val progress = message.obj as ProgressBarUpdate
 
@@ -45,6 +42,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        setSupportActionBar(toolBar)
+
         timePickerListener = TimePickerChangeListener(pickedTime)
 
         timePicker.setOnSeekBarChangeListener(timePickerListener)
