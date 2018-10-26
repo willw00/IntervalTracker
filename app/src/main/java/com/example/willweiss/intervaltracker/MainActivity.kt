@@ -25,8 +25,6 @@ class MainActivity : AppCompatActivity() {
             Interval("First!", 10),
             Interval("Second!", 10)))
 
-    private lateinit var mDrawerLayout: DrawerLayout
-
     val progressBarHandler = Handler() {message ->
         if (message.what == UPDATE_PROGRESS_BAR) {
             val progress = message.obj as ProgressBarUpdate
@@ -55,7 +53,11 @@ class MainActivity : AppCompatActivity() {
             setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
         }
 
-        mDrawerLayout = drawer_layout
+        navDrawer.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            drawer_layout.closeDrawers()
+            true
+        }
 
         timePickerListener = TimePickerChangeListener(pickedTime)
 
@@ -67,7 +69,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             android.R.id.home -> {
-                mDrawerLayout.openDrawer(GravityCompat.START)
+                drawer_layout.openDrawer(GravityCompat.START)
                 true
             }
             else -> super.onOptionsItemSelected(item)

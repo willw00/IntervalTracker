@@ -6,5 +6,8 @@
         <item
             android:id="@+id/item_1"
             android:title="Title 1"/>
+        <item
+            android:id="@+id/item_2"
+            android:title="Title 2"/>
     </group>
 </menu>
