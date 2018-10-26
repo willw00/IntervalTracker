@@ -3,6 +3,10 @@ package com.example.willweiss.intervaltracker
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBar
+import android.view.MenuItem
 import android.view.View
 import com.example.willweiss.intervaltracker.components.ProgressBarUpdatingCountDownTimer
 import com.example.willweiss.intervaltracker.components.TimePickerChangeListener
@@ -20,6 +24,8 @@ class MainActivity : AppCompatActivity() {
     private val intervalSet = IntervalSet(listOf(
             Interval("First!", 10),
             Interval("Second!", 10)))
+
+    private lateinit var mDrawerLayout: DrawerLayout
 
     val progressBarHandler = Handler() {message ->
         if (message.what == UPDATE_PROGRESS_BAR) {
@@ -44,12 +50,28 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         setSupportActionBar(toolBar)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_menu_black_24dp)
+        }
+
+        mDrawerLayout = drawer_layout
 
         timePickerListener = TimePickerChangeListener(pickedTime)
 
         timePicker.setOnSeekBarChangeListener(timePickerListener)
 
         pickedTime.text = timePicker.progress.toString() + "s"
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                mDrawerLayout.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     fun startTimer(view: View) {
