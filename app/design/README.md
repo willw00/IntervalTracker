@@ -1,25 +1,23 @@
-#Navigation
+# Navigation
 
-## Show Interval
+## Show Interval Activity
 Links:
 * [Edit Interval](#edit-interval)
 
 Actions:
 * Run
 
-## Edit Interval
-Links:
-* [Back](#show-interval)
-
+## Edit Interval Activity
 Actions:
+* Back
 * Save
 
-## Navigation Drawer
+## Navigation Drawer Activity
 Links:
 * [Show Interval](#show-interval) for each saved interval
 * [New Interval](#new-interval)
 
-## New Interval
+## New Interval Activity
 Actions:
 * Back
 * Save 
