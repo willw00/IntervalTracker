@@ -12,6 +12,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import com.example.willweiss.intervaltracker.components.DAO
+import com.example.willweiss.intervaltracker.components.LocalFileDAO
 import com.example.willweiss.intervaltracker.components.ProgressBarUpdatingCountDownTimer
 import com.example.willweiss.intervaltracker.components.TimePickerChangeListener
 import com.example.willweiss.intervaltracker.model.Interval
@@ -21,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity() {
-
     private var timePickerListener: TimePickerChangeListener? = null
 
     private val UPDATE_PROGRESS_BAR: Int = 1
@@ -101,6 +102,10 @@ class MainActivity : AppCompatActivity() {
         setNav(navDrawer)
 
         setTimePicker(pickedTime)
+
+        val localDAO = LocalFileDAO()
+        val saveResp = localDAO.saveIntervalSet(applicationContext, intervalSet)
+        val saveResp2 = localDAO.saveIntervalSet(applicationContext, intervalSet2)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

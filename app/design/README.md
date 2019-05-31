@@ -2,7 +2,7 @@
 
 ## Show Interval Activity
 Links:
-* [Edit Interval](#edit-interval)
+* [Edit Interval](#edit-interval-activity)
 
 Actions:
 * Run
@@ -10,14 +10,14 @@ Actions:
 ## Edit Interval Activity
 Actions:
 * Back
-* Save
+* Save and redirect to [Show](#show-interval-activity)
 
 ## Navigation Drawer Activity
 Links:
-* [Show Interval](#show-interval) for each saved interval
-* [New Interval](#new-interval)
+* [Show Interval](#show-interval-activity) for each saved interval
+* [New Interval](#new-interval-activity)
 
 ## New Interval Activity
 Actions:
 * Back
-* Save 
+* Save, display "Saved" Toast and redirect to [Show](#show-interval-activity)

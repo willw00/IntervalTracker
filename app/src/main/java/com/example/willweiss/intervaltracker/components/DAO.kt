@@ -8,13 +8,13 @@ import java.io.File
 
 
 interface DAO {
-    fun saveIntervalSets(context: Context, sets: List<IntervalSet>)
+    fun saveIntervalSet(context: Context, set: IntervalSet)
     fun loadIntervalSets(context: Context): List<IntervalSet?>
 }
 
 class LocalFileDAO: DAO {
 
-    private val fileName: String = "interval_sets.json"
+    private val intervalDirectory = "intervals"
 
     private val interalSetConverter = object: Converter {
         override fun toJson(value: Any): String {
@@ -33,22 +33,25 @@ class LocalFileDAO: DAO {
 
     }
 
-    override fun saveIntervalSets(context: Context, sets: List<IntervalSet>) {
-        val jsonStrings = sets.map { s -> s.toJson() }.joinToString(separator = "\n")
+    override fun saveIntervalSet(context: Context, set: IntervalSet) {
+        val jsonString = set.toJson()
+        val fileName = set.name.toLowerCase().replace(" ", "_").plus(".json")
 
-        context.openFileOutput(fileName, Context.MODE_PRIVATE).use {f ->
-            f.write(jsonStrings.toByteArray())
-        }
+        val newFile = File(context.filesDir, fileName)
+        newFile.writeText(jsonString)
     }
 
     override fun loadIntervalSets(context: Context): List<IntervalSet?> {
 
-        return File(fileName).useLines { lines ->
-            lines.map { line ->
-                Klaxon()
-                .converter(interalSetConverter)
-                .parse<IntervalSet>(line)
-            }.toList()
+        val dir = context.filesDir
+        val sets = dir.listFiles().map {f ->
+            f.useLines { lines ->
+                    Klaxon()
+                    .converter(interalSetConverter)
+                    .parse<IntervalSet>(lines.first())
+            }
         }
+
+        return sets.sortedBy { it?.name }
     }
 }
