@@ -106,6 +106,8 @@ class MainActivity : AppCompatActivity() {
         val localDAO = LocalFileDAO()
         val saveResp = localDAO.saveIntervalSet(applicationContext, intervalSet)
         val saveResp2 = localDAO.saveIntervalSet(applicationContext, intervalSet2)
+
+        val loadResp = localDAO.loadIntervalSets(applicationContext)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

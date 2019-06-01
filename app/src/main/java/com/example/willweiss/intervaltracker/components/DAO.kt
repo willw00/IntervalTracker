@@ -4,6 +4,7 @@ import android.content.Context
 import com.beust.klaxon.*
 import com.example.willweiss.intervaltracker.model.Interval
 import com.example.willweiss.intervaltracker.model.IntervalSet
+import org.json.JSONObject
 import java.io.File
 
 
@@ -25,7 +26,10 @@ class LocalFileDAO: DAO {
         override fun fromJson(jv: JsonValue): Any? {
             val jsonObject = jv.obj
             val name = jsonObject?.string("name")
-            val intervals = jsonObject?.array<Interval>("intervals")
+            val intervals = jsonObject?.array<JsonObject>("intervals")?.map {j ->
+                Interval(j.string("name")!!, j.int("seconds")!!)
+            }
+
             return IntervalSet(name!!, intervals!!)
         }
 
