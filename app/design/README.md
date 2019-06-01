@@ -5,8 +5,9 @@ Links:
 * [Edit Interval](#edit-interval-activity)
 
 Actions:
+* Update most recently-used interval file
 * Run
-* Delete, display "Deleted" Toast
+* Delete, display "Deleted" Toast, redirect to next Interval, or to [New Interval](#new-interval-activity) none
 
 ## Edit Interval Activity
 Actions:

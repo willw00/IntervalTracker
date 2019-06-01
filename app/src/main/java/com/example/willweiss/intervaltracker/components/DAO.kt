@@ -13,7 +13,7 @@ interface DAO {
 }
 
 class LocalFileDAO: DAO {
-    
+
     private val interalSetConverter = object: Converter {
         override fun toJson(value: Any): String {
             val iSet = (value as IntervalSet)

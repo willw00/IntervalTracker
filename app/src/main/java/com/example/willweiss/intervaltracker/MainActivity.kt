@@ -1,18 +1,15 @@
 package com.example.willweiss.intervaltracker
 
-import android.content.ClipData
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
-import android.support.v7.app.ActionBar
 import android.view.Menu
+import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
-import com.example.willweiss.intervaltracker.components.DAO
 import com.example.willweiss.intervaltracker.components.LocalFileDAO
 import com.example.willweiss.intervaltracker.components.ProgressBarUpdatingCountDownTimer
 import com.example.willweiss.intervaltracker.components.TimePickerChangeListener
@@ -20,7 +17,6 @@ import com.example.willweiss.intervaltracker.model.Interval
 import com.example.willweiss.intervaltracker.model.IntervalSet
 import com.example.willweiss.intervaltracker.model.ProgressBarUpdate
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MainActivity : AppCompatActivity() {
     private var timePickerListener: TimePickerChangeListener? = null
@@ -37,9 +33,9 @@ class MainActivity : AppCompatActivity() {
 
     private val intervalSets = mapOf(0 to intervalSet, 1 to intervalSet2)
 
-    var activeIntervalSet = intervalSet
+    private var activeIntervalSet = intervalSet
 
-    val progressBarHandler = Handler() {message ->
+    private val progressBarHandler = Handler() { message ->
         if (message.what == UPDATE_PROGRESS_BAR) {
             val progress = message.obj as ProgressBarUpdate
 
@@ -104,10 +100,16 @@ class MainActivity : AppCompatActivity() {
         setTimePicker(pickedTime)
 
         val localDAO = LocalFileDAO()
-        val saveResp = localDAO.saveIntervalSet(applicationContext, intervalSet)
-        val saveResp2 = localDAO.saveIntervalSet(applicationContext, intervalSet2)
+        localDAO.saveIntervalSet(this, intervalSet)
+        localDAO.saveIntervalSet(this, intervalSet2)
 
-        val loadResp = localDAO.loadIntervalSets(applicationContext)
+        localDAO.loadIntervalSets(this)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.interval_view_menu, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
