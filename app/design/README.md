@@ -6,11 +6,12 @@ Links:
 
 Actions:
 * Run
+* Delete, display "Deleted" Toast
 
 ## Edit Interval Activity
 Actions:
 * Back
-* Save and redirect to [Show](#show-interval-activity)
+* Save and redirect to [Show](#show-interval-activity) with "Saved Toast"
 
 ## Navigation Drawer Activity
 Links:

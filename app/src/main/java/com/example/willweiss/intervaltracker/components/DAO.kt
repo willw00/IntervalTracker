@@ -4,7 +4,6 @@ import android.content.Context
 import com.beust.klaxon.*
 import com.example.willweiss.intervaltracker.model.Interval
 import com.example.willweiss.intervaltracker.model.IntervalSet
-import org.json.JSONObject
 import java.io.File
 
 
@@ -14,9 +13,7 @@ interface DAO {
 }
 
 class LocalFileDAO: DAO {
-
-    private val intervalDirectory = "intervals"
-
+    
     private val interalSetConverter = object: Converter {
         override fun toJson(value: Any): String {
             val iSet = (value as IntervalSet)
@@ -34,7 +31,6 @@ class LocalFileDAO: DAO {
         }
 
         override fun canConvert(cls: Class<*>): Boolean = cls == IntervalSet::class.java
-
     }
 
     override fun saveIntervalSet(context: Context, set: IntervalSet) {
